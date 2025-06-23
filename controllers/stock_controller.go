@@ -48,3 +48,15 @@ func GetStokById(c *fiber.Ctx) error {
 
 	return c.JSON(data)
 }
+
+type UpdateStokByParam struct {
+	Id_stok_bahan string `json:"id_stok_bahan" params:"id_stok_bahan" validate:"required,uuid4"`
+}
+
+type UpdateStokByForm struct {
+	NamaBahan string `json:"nama_bahan" form:"nama_bahan" validate:"required"`
+	Deskripsi string `json:"deskripsi" form:"deskripsi"`
+	Stok      int    `json:"stok" form:"stok" validate:"required"`
+	Satuan    string `json:"satuan" form:"satuan" validate:"required"`
+	Kategori  string `json:"kategori" form:"kategori"`
+}
