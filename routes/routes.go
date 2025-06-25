@@ -8,6 +8,7 @@ func SetupRoutes(app *fiber.App) {
 
 	SetupRoutesAuth(app)
 	SetupRoutesStock(app)
+	SetupRoutesOutlets(app)
 
 	// auth := app.Group("/api", middlewares.JWTProtected())
 
