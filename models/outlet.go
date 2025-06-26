@@ -15,7 +15,7 @@ func CreateOutlet(nama, alamat string) types.Response {
 	id := uuid.New()
 
 	query := `
-		INSERT INTO outlets (id_outlet, nama_outlet, alamat, status_data)
+		INSERT INTO outlet (id_outlet, nama_outlet, alamat, status_data)
 		VALUES (?, ?, ?, true)
 	`
 
@@ -40,7 +40,7 @@ func GetAllOutlets(form *types.GetData) types.Response {
 	var resp types.Response
 
 	sRecursive := ``
-	sTable := `SELECT id_outlet, nama_outlet, alamat, created_at, updated_at FROM outlets WHERE status_data = true`
+	sTable := `SELECT id_outlet, nama_outlet, alamat, created_at, updated_at FROM outlet WHERE status_data = true`
 
 	// Handle filter (LOWER LIKE)
 	sFilter := ``
