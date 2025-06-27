@@ -141,7 +141,7 @@ func UpdateStok(id_stok_bahan, nama_bahan, deskripsi string, stok int, satuan, k
 func DeleteStok(id_stok_bahan string) types.Response {
 	var resp types.Response
 
-	// Eksekusi query untuk menghapus data master_aplikasi secara permanen
+	// Eksekusi query untuk menghapus stok secara permanen
 	result := config.DB.Exec(`DELETE FROM stok_bahan
 								WHERE id_stok_bahan = ?`, id_stok_bahan)
 
