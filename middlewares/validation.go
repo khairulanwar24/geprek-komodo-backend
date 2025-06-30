@@ -245,3 +245,43 @@ func ValidatedParams2(form interface{}) fiber.Handler {
 		return c.Next()
 	}
 }
+
+func ValidatedQueryAs(key string, form interface{}) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		formInstance := reflect.New(reflect.TypeOf(form).Elem()).Interface()
+
+		// Parse query
+		if err := c.QueryParser(formInstance); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(types.Response{
+				Success: false,
+				Message: "Gagal parsing query: " + err.Error(),
+				Data:    nil,
+			})
+		}
+
+		// Validasi
+		if err := validate.Struct(formInstance); err != nil {
+			var validationErrors validator.ValidationErrors
+			if errors.As(err, &validationErrors) {
+				errMap := make(map[string]string)
+				for _, v := range validationErrors {
+					errMap[v.Field()] = getErrorMessage(v)
+				}
+				return c.Status(fiber.StatusBadRequest).JSON(types.Response{
+					Success: false,
+					Message: "Invalid input",
+					Data:    errMap,
+				})
+			}
+			return c.Status(fiber.StatusInternalServerError).JSON(types.Response{
+				Success: false,
+				Message: "Validation error: " + err.Error(),
+				Data:    nil,
+			})
+		}
+
+		// Simpan ke context dengan key khusus
+		c.Locals(key, formInstance)
+		return c.Next()
+	}
+}

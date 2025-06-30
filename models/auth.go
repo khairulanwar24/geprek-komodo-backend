@@ -4,12 +4,13 @@ import (
 	"ayam-geprek-backend/config"
 	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type User struct {
-	ID        uint       `gorm:"primaryKey" json:"id"`
+	ID        uuid.UUID  `gorm:"column:id_user;primaryKey;type:uuid;default:uuid_generate_v4()" json:"id_user"`
 	Username  string     `gorm:"uniqueIndex;not null" json:"username"`
 	Password  string     `json:"password"`
 	Nama      string     `json:"nama"`

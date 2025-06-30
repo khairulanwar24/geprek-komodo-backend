@@ -7,6 +7,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 // 👇 Secret disimpan di sini
@@ -14,13 +15,13 @@ var JwtSecret = []byte("halosayang")
 
 // 👇 Custom claims
 type JwtCustomClaims struct {
-	Username string `json:"username"`
-	Id_user  uint   `json:"id"`
+	Username string    `json:"username"`
+	Id_user  uuid.UUID `json:"id"`
 	jwt.RegisteredClaims
 }
 
 // 🔑 Token Generator
-func GenerateAccessToken(username string, id_user uint) (string, error) {
+func GenerateAccessToken(username string, id_user uuid.UUID) (string, error) {
 	claims := &JwtCustomClaims{
 		Username: username,
 		Id_user:  id_user,

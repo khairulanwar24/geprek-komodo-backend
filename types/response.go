@@ -13,3 +13,8 @@ type GetData struct {
 	Filter string `json:"filter" form:"filter" validate:""`
 	Params string `json:"params" form:"params" validate:""`
 }
+
+type GetDataTransaksi struct {
+	IdOutlet       string `json:"id_outlet" form:"id_outlet" validate:"omitempty,uuid4"`
+	JenisTransaksi string `json:"jenis_transaksi" form:"jenis_transaksi" validate:"omitempty,oneof=masuk keluar"`
+}
