@@ -15,6 +15,14 @@ type GetData struct {
 }
 
 type GetDataTransaksi struct {
-	IdOutlet       string `json:"id_outlet" form:"id_outlet" validate:"omitempty,uuid4"`
-	JenisTransaksi string `json:"jenis_transaksi" form:"jenis_transaksi" validate:"omitempty,oneof=masuk keluar"`
+	IdOutlet       string `query:"id_outlet" form:"id_outlet" validate:"omitempty,uuid4"`
+	JenisTransaksi string `query:"jenis_transaksi" form:"jenis_transaksi" validate:"omitempty,oneof=masuk keluar"`
+	StartDate      string `json:"start_date" form:"start_date"`
+	EndDate        string `json:"end_date" form:"end_date"`
+}
+
+type LaporanTransaksiQuery struct {
+	IdOutlet  string `query:"id_outlet" validate:"omitempty,uuid4"`
+	StartDate string `query:"start_date" validate:"omitempty,datetime=2006-01-02"`
+	EndDate   string `query:"end_date" validate:"omitempty,datetime=2006-01-02"`
 }

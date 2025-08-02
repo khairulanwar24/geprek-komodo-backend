@@ -15,27 +15,36 @@ type LoginInput struct {
 	Password string `json:"password"`
 }
 
-func LoginUser(input LoginInput) (string, error) {
+// ✅ Updated untuk return: token + user
+func LoginUser(input LoginInput) (string, *models.User, error) {
 	userPtr, err := models.GetUserByUsername(input.Username)
 	if err != nil || userPtr == nil {
-		return "", errors.New("invalid credentials")
+		return "", nil, errors.New("invalid credentials")
 	}
 	user := *userPtr
 
 	if !models.CheckPassword(input.Password, user.Password) {
-		return "", errors.New("wrong password")
+		return "", nil, errors.New("wrong password")
 	}
 
+	// Buat JWT claim
 	claims := middlewares.JwtCustomClaims{
 		Id_user:  user.ID,
 		Username: user.Username,
-
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 		},
 	}
 
+	// Buat JWT token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(middlewares.JwtSecret)
+	signedToken, err := token.SignedString(middlewares.JwtSecret)
+	if err != nil {
+		return "", nil, err
+	}
 
+	// Jangan kirim password ke response
+	user.Password = ""
+
+	return signedToken, &user, nil
 }

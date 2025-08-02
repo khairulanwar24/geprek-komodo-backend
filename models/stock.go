@@ -25,7 +25,7 @@ func GetListStoks(form *types.GetData) types.Response {
 	sFilter := ``
 	if form.Filter != "" {
 		form.Filter = "%" + strings.ToLower(form.Filter) + "%"
-		sFilter = `and LOWER(nama_bahan) LIKE ` + "'" + form.Filter + "'" + ` OR LOWER(deskripsi) LIKE ` + "'" + form.Filter + "'" + ` OR LOWER(stok) LIKE ` + "'" + form.Filter + "'" + ` OR LOWER(kategoru) LIKE ` + "'" + form.Filter + "'"
+		sFilter = `and LOWER(nama_bahan) LIKE ` + "'" + form.Filter + "'" + ` OR LOWER(deskripsi) LIKE ` + "'" + form.Filter + "'" + ` OR LOWER(stok) LIKE ` + "'" + form.Filter + "'" + ` OR LOWER(kategori) LIKE ` + "'" + form.Filter + "'"
 	} else {
 		sFilter = ``
 	}

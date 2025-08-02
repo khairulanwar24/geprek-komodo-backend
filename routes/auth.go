@@ -8,6 +8,8 @@ import (
 )
 
 func SetupRoutesAuth(app *fiber.App) {
+
+	app.Get("/", controllers.ShowLoginPage)
 	// 🔓 PUBLIC: Tidak pakai JWT middleware
 	app.Post("/auth/login", controllers.Login)
 	app.Post("/auth/logout", controllers.Logout)
