@@ -1,0 +1,15 @@
+{{ define "layouts/main/partials/header/_header.html" }}
+<header class="bg-white border-bottom shadow-sm px-4 d-flex align-items-center justify-content-between" style="height: 60px;">
+  
+  <!-- Kiri: Logo kecil (untuk mobile bisa toggle sidebar) -->
+  <div class="d-flex align-items-center gap-2">
+    <button class="btn btn-sm btn-outline-secondary d-lg-none" id="sidebarToggle">
+      <i class="bi bi-list"></i>
+    </button>
+    <img src="/assets/media/logos/logo-small.png" alt="Logo" style="height: 40px;">
+  </div>
+
+  <!-- Kanan: Navbar -->
+  {{ template "layouts/main/partials/header/_navbar.html" . }}
+</header>
+{{ end }}
