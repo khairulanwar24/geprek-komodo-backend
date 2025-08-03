@@ -77,3 +77,31 @@ func JWTProtected() fiber.Handler {
 		return c.Next()
 	}
 }
+
+func JWTProtectedHTML() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		var tokenStr string
+		authHeader := c.Get("Authorization")
+		if strings.HasPrefix(authHeader, "Bearer ") {
+			tokenStr = strings.TrimPrefix(authHeader, "Bearer ")
+		} else {
+			tokenStr = c.Cookies("access_token")
+		}
+
+		if tokenStr == "" {
+			return c.Redirect("/") // ke login
+		}
+
+		token, err := jwt.ParseWithClaims(tokenStr, &JwtCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+			return JwtSecret, nil
+		})
+
+		if err != nil || !token.Valid {
+			return c.Redirect("/")
+		}
+		claims := token.Claims.(*JwtCustomClaims)
+		c.Locals("username", claims.Username)
+		c.Locals("id_user", claims.Id_user)
+		return c.Next()
+	}
+}

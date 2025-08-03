@@ -1,29 +1,33 @@
 package routes
 
 import (
-	"ayam-geprek-backend/controllers"
 	"ayam-geprek-backend/middlewares"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func SetupRoutes(app *fiber.App) {
+	// Static assets (jika perlu, bisa ditambah sesuai struktur)
+	app.Static("/assets", "./public/assets")
+	app.Static("/views", "./views") // optional, kalau perlu expose (biasanya tidak)
 
-	app.Get("/", controllers.ShowLoginPage)
-	app.Get("/dashboard", middlewares.AuthMiddleware, controllers.DashboardPage)
+	// Global locals / layout injection (mirip mentor)
+	app.Use(func(c *fiber.Ctx) error {
+		c.Locals("Titleapp", "Ayam Geprek Admin")
+		return c.Next()
+	})
 
+	// Auth / login routes
 	SetupRoutesAuth(app)
-	SetupRoutesStock(app)
-	SetupRoutesOutlets(app)
-	SetupRoutesKeuangan(app)
-	SetupRoutesLaporan(app)
+	app.Use(middlewares.InjectMenu())
+	// Setelah login: dashboard dengan middleware
+	DashboardRoutes(app)
 
-	// halaman login
-	// routes
-	// app.Get("/dashboard", middlewares.JWTProtected(), controllers.DashboardPage)
-
-	// auth := app.Group("/api", middlewares.JWTProtected())
-
-	// auth.Post("/stock", controllers.CreateStock)
-	// auth.Get("/stock", controllers.ListStock)
+	// 404 fallback
+	app.All("*", func(c *fiber.Ctx) error {
+		return c.Status(404).Render("layouts/error/404", fiber.Map{
+			"message":  "Halaman tidak ditemukan.",
+			"Titleapp": c.Locals("Titleapp"),
+		})
+	})
 }

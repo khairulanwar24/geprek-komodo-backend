@@ -1,0 +1,16 @@
+{{ define "layouts/main/layout" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ .PageTitle }}</title>
+</head>
+<body>
+  <div class="app-wrapper">
+    <main class="app-content">
+      {{ embed }}
+    </main>
+  </div>
+</body>
+</html>
+{{ end }}

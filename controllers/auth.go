@@ -29,7 +29,7 @@ func Login(c *fiber.Ctx) error {
 		}
 		return c.Render("login/login", fiber.Map{
 			"Error": "Input tidak valid",
-		}, "layouts/base")
+		})
 	}
 
 	// Debug input yang diterima
@@ -47,7 +47,7 @@ func Login(c *fiber.Ctx) error {
 		}
 		return c.Render("login/login", fiber.Map{
 			"Error": err.Error(),
-		}, "layouts/base")
+		})
 	}
 
 	fmt.Println("[DEBUG] Login success - Token:", token)

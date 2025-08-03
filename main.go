@@ -4,6 +4,7 @@ import (
 	"ayam-geprek-backend/config"
 	"ayam-geprek-backend/models"
 	"ayam-geprek-backend/routes"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -18,7 +19,6 @@ func main() {
 
 	// Gunakan engine template HTML untuk render file dari ./views
 	engine := html.New("./views", ".html")
-
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
@@ -37,6 +37,11 @@ func main() {
 	// Handle OPTIONS (preflight)
 	app.Options("/*", func(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusNoContent)
+	})
+
+	app.Use(func(c *fiber.Ctx) error {
+		fmt.Printf("→ %s %s\n", c.Method(), c.Path())
+		return c.Next()
 	})
 
 	// Setup semua route
