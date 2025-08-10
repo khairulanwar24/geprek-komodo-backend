@@ -1,0 +1,35 @@
+/* Sidebar default untuk desktop */
+.custom-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease-in-out;
+    background: #fff;
+    z-index: 1000;
+}
+
+/* Konten */
+.custom-content {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Mobile: sembunyikan sidebar dan jadikan off-canvas */
+@media (max-width: 991px) {
+    .custom-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    .custom-sidebar.active {
+        transform: translateX(0);
+    }
+
+    /* Konten tetap full width di mobile */
+    .custom-content {
+        width: 100%;
+    }
+}

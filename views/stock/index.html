@@ -1,0 +1,43 @@
+{{define "stock/index"}}
+<div class="card">
+
+    <div class="card-header">
+        <h3 class="card-title"><strong>Daftar Stok Bahan</strong></h3>
+          <div class="card-toolbar">
+            <a href="/stok-bahan/add" class="btn btn-primary">
+                <i class="ki-duotone ki-plus fs-2"></i> Tambah Bahan
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nama Bahan</th>
+                    <th>Deskripsi</th>
+                    <th>Stok</th>
+                    <th>Satuan</th>
+                    <th>Kategori</th>
+                    <th>Terakhir Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Stoks}}
+                <tr>
+                    <td>{{.NamaBahan}}</td>
+                    <td>{{.Deskripsi}}</td>
+                    <td>{{.Stok}}</td>
+                    <td>{{.Satuan}}</td>
+                    <td>{{.Kategori}}</td>
+                    <td>{{.UpdatedAt}}</td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="6" class="text-center">Tidak ada data</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}

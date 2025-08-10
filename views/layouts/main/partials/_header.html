@@ -1,0 +1,26 @@
+{{ define "layouts/main/partials/_header.html" }}
+<header class="app-header d-flex align-items-stretch justify-content-between border-bottom shadow-sm px-4" style="height: 60px;">
+  
+  <!--begin::Logo + Sidebar Toggle-->
+  <div class="d-flex align-items-center gap-2">
+    <button class="btn btn-sm btn-icon btn-light d-lg-none" id="sidebarToggle" title="Toggle sidebar">
+      <i class="bi bi-list fs-2"></i>
+    </button>
+    <a href="/" class="d-flex align-items-center">
+      <img src="/assets/media/logos/custom-1.png" alt="Logo" style="height: 40px;" />
+    </a>
+  </div>
+
+  <button id="sidebarToggle" class="btn btn-icon d-lg-none me-2">
+    <i class="ki-outline ki-menu fs-2"></i>
+  </button>
+
+  <!--end::Logo + Sidebar Toggle-->
+
+  <!--begin::Navbar-->
+  
+  {{ template "layouts/main/partials/header/_navbar.html" . }}
+  <!--end::Navbar-->
+
+</header>
+{{ end }}

@@ -8,10 +8,35 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetListStok(c *fiber.Ctx) error {
-	form := c.Locals("validatedForm").(*types.GetData)
-	data := models.GetListStoks(form)
-	return c.JSON(data)
+// func GetListStok(c *fiber.Ctx) error {
+// 	form := c.Locals("validatedForm").(*types.GetData)
+// 	data := models.GetListStocks(form)
+// 	return c.JSON(data)
+// }
+
+func IndexStock(c *fiber.Ctx) error {
+	form := new(types.GetData)
+	if err := c.QueryParser(form); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(types.Response{
+			Success: false,
+			Message: "Invalid request: " + err.Error(),
+		})
+	}
+
+	stok := models.GetListStocks(form)
+
+	return c.Render("stock/index", fiber.Map{
+		"PageTitle": "Stok Bahan",
+		"Stoks":     stok.Data,
+		"Menu":      c.Locals("menu"),
+	}, "layouts/main/layout")
+}
+
+func AddStock(c *fiber.Ctx) error {
+	return c.Render("stock/form_add", fiber.Map{
+		"PageTitle": "Tambah Stok Bahan",
+		"Menu":      c.Locals("menu"),
+	}, "layouts/main/layout")
 }
 
 type CreateStokForm struct {

@@ -16,12 +16,13 @@ func SetupRoutes(app *fiber.App) {
 		c.Locals("Titleapp", "Ayam Geprek Admin")
 		return c.Next()
 	})
-
+	app.Use(middlewares.InjectMenu())
 	// Auth / login routes
 	SetupRoutesAuth(app)
-	app.Use(middlewares.InjectMenu())
+
 	// Setelah login: dashboard dengan middleware
 	DashboardRoutes(app)
+	SetupRoutesStock(app)
 
 	// 404 fallback
 	app.All("*", func(c *fiber.Ctx) error {

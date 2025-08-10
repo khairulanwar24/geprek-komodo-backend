@@ -1,7 +1,7 @@
 {{ define "layouts/main/partials/header/_navbar.html" }}
 <nav class="d-flex align-items-center gap-3">
 
-  <!-- Tombol Apps -->
+  <!-- Dropdown Apps -->
   <div class="dropdown">
     <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown">
       <i class="bi bi-grid fs-5"></i>
@@ -18,16 +18,8 @@
     <i class="bi bi-brightness-high fs-5"></i>
   </button>
 
-  <!-- User Avatar -->
-  <div class="dropdown">
-    <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown">
-      <img src="/assets/media/users/default.jpg" alt="User" class="rounded-circle" style="width:35px;height:35px;">
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-      <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i> Profil</a></li>
-      <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
-    </ul>
-  </div>
+  <!-- User -->
+{{ template  "layouts/main/partials/header/menus/_user-account-menu.html" }}
 
 </nav>
 {{ end }}

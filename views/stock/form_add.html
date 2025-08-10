@@ -1,0 +1,92 @@
+{{ define "stock/form_add"}}
+<script>
+    document.addEventListener("htmx:afterRequest", function (event) {
+        let response = event.detail.xhr.response;
+
+        if (event.detail.successful) {
+            let data = JSON.parse(response);
+
+            if (data.success) {
+                Swal.fire({
+                    title: "Berhasil!",
+                    text: data.message,
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false,
+                }).then(() => {
+                    window.location.href = "/stok-bahan";
+                });
+
+                document.getElementById("form-add-stok").reset();
+            }
+        }
+    });
+</script>
+
+<div class="card card-flush">
+    <div class="card-header pt-7">
+        <div class="card-title">
+            <i class="ki-duotone ki-package fs-1 me-2"></i>
+            <h2>Tambah Stok Bahan</h2>
+        </div>
+    </div>
+
+    <div class="card-body pt-5">
+        <form
+            class="form fv-plugins-bootstrap5 fv-plugins-framework"
+            hx-post="/stok-bahan"
+            hx-trigger="submit"
+            hx-target="#response"
+            hx-swap="innerHTML"
+            id="form-add-stok">
+
+            <!-- Nama Bahan -->
+            <div class="fv-row mb-7">
+                <label class="required form-label">Nama Bahan</label>
+                <input type="text" class="form-control form-control-solid" name="nama_bahan" />
+            </div>
+
+            <!-- Deskripsi -->
+            <div class="fv-row mb-7">
+                <label class="form-label">Deskripsi</label>
+                <textarea class="form-control form-control-solid" name="deskripsi"></textarea>
+            </div>
+
+            <!-- Stok -->
+            <div class="fv-row mb-7">
+                <label class="required form-label">Jumlah Stok</label>
+                <input type="number" min="0" class="form-control form-control-solid" name="stok" />
+            </div>
+
+            <!-- Satuan -->
+            <div class="fv-row mb-7">
+                <label class="required form-label">Satuan</label>
+                <select class="form-select form-select-solid" name="satuan">
+                    <option value="">Pilih Satuan</option>
+                    <option value="kg">Kilogram</option>
+                    <option value="liter">Liter</option>
+                    <option value="pcs">Pcs</option>
+                </select>
+            </div>
+
+            <!-- Kategori -->
+            <div class="fv-row mb-7">
+                <label class="form-label">Kategori</label>
+                <input type="text" class="form-control form-control-solid" name="kategori" />
+            </div>
+
+            <!-- Action Buttons -->
+            <div id="response"></div>
+            <div class="d-flex justify-content-end">
+                <a href="/stok-bahan" class="btn btn-light me-3">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <span class="indicator-label">Save</span>
+                    <span class="indicator-progress">Please wait...
+                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{{ end }}

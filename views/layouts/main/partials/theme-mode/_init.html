@@ -1,0 +1,28 @@
+{{ define "partials/theme-mode/_init.html" }}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const root = document.documentElement;
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let theme = localStorage.getItem("theme-mode") || "system";
+
+    const applyTheme = (mode) => {
+      const finalMode = (mode === "system") ? (systemDark ? "dark" : "light") : mode;
+      root.setAttribute("data-theme", finalMode);
+      localStorage.setItem("theme-mode", mode);
+      
+      document.querySelectorAll('.theme-light-show').forEach(el => el.style.display = finalMode === 'light' ? 'inline' : 'none');
+      document.querySelectorAll('.theme-dark-show').forEach(el => el.style.display = finalMode === 'dark' ? 'inline' : 'none');
+    };
+
+    applyTheme(theme);
+
+    document.querySelectorAll('[data-kt-element="mode"]').forEach(el => {
+      el.addEventListener("click", function (e) {
+        e.preventDefault();
+        const mode = this.getAttribute("data-kt-value");
+        applyTheme(mode);
+      });
+    });
+  });
+</script>
+{{ end }}

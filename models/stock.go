@@ -2,43 +2,70 @@ package models
 
 import (
 	"ayam-geprek-backend/config"
+	"time"
 
-	"ayam-geprek-backend/middlewares"
 	"ayam-geprek-backend/types"
 	"strings"
 )
 
-func GetListStoks(form *types.GetData) types.Response {
+type StokBahan struct {
+	IdStokBahan string    `form:"id_stok_bahan" validate:"required"`
+	NamaBahan   string    `form:"nama_bahan" validate:"required"`
+	Deskripsi   string    `form:"deskripsi"`
+	Stok        int64     `form:"stok" validate:"required"`
+	Satuan      string    `form:"satuan" validate:"required"`
+	Kategori    string    `form:"kategori"`
+	UpdatedAt   time.Time `form:"updated_at"`
+	// StatusData  bool      `form:"status_data"`
+}
+
+func GetListStocks(form *types.GetData) types.Response {
 	var resp types.Response
+	var stocks []StokBahan
 
-	sRecursive := ``
-	sTable := ` SELECT id_stok_bahan 
-											, nama_bahan
-											, deskripsi
-											, stok
-											, satuan
-											, kategori
-											, updated_at
-											FROM
-											stok_bahan WHERE status_data = true`
+	query := `
+		SELECT 
+			id_stok_bahan,
+			nama_bahan,
+			deskripsi,
+			stok,
+			satuan,
+			kategori,
+			updated_at
+		FROM
+			stok_bahan 
+		WHERE 
+			status_data = true
+	`
 
-	sFilter := ``
+	// Filter
 	if form.Filter != "" {
 		form.Filter = "%" + strings.ToLower(form.Filter) + "%"
-		sFilter = `and LOWER(nama_bahan) LIKE ` + "'" + form.Filter + "'" + ` OR LOWER(deskripsi) LIKE ` + "'" + form.Filter + "'" + ` OR LOWER(stok) LIKE ` + "'" + form.Filter + "'" + ` OR LOWER(kategori) LIKE ` + "'" + form.Filter + "'"
+		query += `
+			AND (
+				LOWER(nama_bahan) LIKE ? OR
+				LOWER(deskripsi) LIKE ? OR
+				CAST(stok AS TEXT) LIKE ? OR
+				LOWER(kategori) LIKE ?
+			)
+		`
+		args := []interface{}{form.Filter, form.Filter, form.Filter, form.Filter}
+		config.DB.Raw(query, args...).Scan(&stocks)
 	} else {
-		sFilter = ``
+		config.DB.Raw(query).Scan(&stocks)
 	}
 
-	stock := middlewares.Datatables(
-		sRecursive, sTable, form.Order, sFilter, form.Limit, form.Offset)
+	if len(stocks) == 0 {
+		resp.Success = false
+		resp.Message = "Data not found"
+		resp.Data = []StokBahan{}
+		return resp
+	}
 
 	resp.Success = true
 	resp.Message = "Success"
-	resp.Data = stock
-
+	resp.Data = stocks
 	return resp
-
 }
 
 func CreateStok(nama_bahan, deskripsi string, stok int, satuan, kategori string) types.Response {
