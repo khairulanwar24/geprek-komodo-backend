@@ -1,0 +1,36 @@
+{{define "stock/form"}}
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{.ActionURL}}">
+            <div class="mb-3">
+                <label class="form-label">Nama Bahan</label>
+                <input type="text" name="nama_bahan" class="form-control" 
+                       value="{{.Stock.NamaBahan}}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Deskripsi</label>
+                <textarea name="deskripsi" class="form-control" rows="3">{{.Stock.Deskripsi}}</textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Stok</label>
+                <input type="number" name="stok" class="form-control" 
+                       value="{{.Stock.Stok}}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Satuan</label>
+                <input type="text" name="satuan" class="form-control" 
+                       value="{{.Stock.Satuan}}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Kategori</label>
+                <input type="text" name="kategori" class="form-control" 
+                       value="{{.Stock.Kategori}}" required>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <a href="/stok-bahan" class="btn btn-secondary">Batal</a>
+            </div>
+        </form>
+    </div>
+</div>
+{{end}}

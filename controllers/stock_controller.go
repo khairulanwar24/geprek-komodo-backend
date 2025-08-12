@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"ayam-geprek-backend/config"
 	"ayam-geprek-backend/models"
 	"ayam-geprek-backend/types"
 	"fmt"
@@ -35,6 +36,7 @@ func IndexStock(c *fiber.Ctx) error {
 func AddStock(c *fiber.Ctx) error {
 	return c.Render("stock/form_add", fiber.Map{
 		"PageTitle": "Tambah Stok Bahan",
+		"ActionURL": "/stok-bahan/add",
 		"Menu":      c.Locals("menu"),
 	}, "layouts/main/layout")
 }
@@ -117,4 +119,30 @@ func DeleteStok(c *fiber.Ctx) error {
 	data := models.DeleteStok(id_stok_bahan)
 
 	return c.JSON(data)
+}
+
+func SaveStock(c *fiber.Ctx) error {
+	var form struct {
+		NamaBahan string `form:"nama_bahan"`
+		Deskripsi string `form:"deskripsi"`
+		Stok      int    `form:"stok"`
+		Satuan    string `form:"satuan"`
+		Kategori  string `form:"kategori"`
+	}
+
+	if err := c.BodyParser(&form); err != nil {
+		return err
+	}
+
+	result := config.DB.Exec(`
+		INSERT INTO stok_bahan (nama_bahan, deskripsi, stok, satuan, kategori, updated_at, status_data)
+		VALUES (?, ?, ?, ?, ?, NOW(), TRUE)`,
+		form.NamaBahan, form.Deskripsi, form.Stok, form.Satuan, form.Kategori,
+	)
+
+	if result.Error != nil {
+		return c.Status(500).SendString(result.Error.Error())
+	}
+
+	return c.Redirect("/stok-bahan")
 }
